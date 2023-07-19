@@ -16,7 +16,7 @@ const CurrencyConverter = () => {
   useEffect(() => {
     if (baseCurrency && targetCurrency && amount) {
       axios
-        .get(`https://v6.exchangerate-api.com/v6/0949e5501127dce5616b4285/latest/{baseCurrency}`)
+        .get(`https://v6.exchangerate-api.com/v6/0949e5501127dce5616b4285/latest/${baseCurrency}`)
         .then((response) => {
           const exchangeRate = response.data.conversion_rates[targetCurrency];
           const convertedValue = Currency(amount)
@@ -59,7 +59,7 @@ const CurrencyConverter = () => {
 
   const fetchTargetCountryData = () => {
     axios
-      .get(`https://restcountries.com/v3.1/currency/{targetCurrency}`)
+      .get(`https://restcountries.com/v3.1/currency/${targetCurrency}`)
       .then((response) => {
         const countries = response.data.filter(
           (country) =>
