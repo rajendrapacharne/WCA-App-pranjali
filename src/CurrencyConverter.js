@@ -21,7 +21,7 @@ const CurrencyConverter = () => {
           const exchangeRate = response.data.conversion_rates[targetCurrency];
           const convertedValue = Currency(amount)
             .multiply(exchangeRate)
-            .format();
+            .format({ symbol: '' });
           setConvertedAmount(convertedValue);
         })
         .catch((error) => {
