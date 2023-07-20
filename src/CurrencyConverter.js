@@ -128,7 +128,7 @@ const CurrencyConverter = () => {
         </div>
         {convertedAmount && (
           <div className="converted-amount">
-            Converted Amount Is: {targetCurrencySymbol} {convertedAmount}
+            Converted Amount Is : {targetCurrencySymbol} {convertedAmount}
           </div>
         )}
       </div>
