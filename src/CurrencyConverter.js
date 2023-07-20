@@ -12,6 +12,8 @@ const CurrencyConverter = () => {
   const [targetCountryData, setTargetCountryData] = useState([]);
   const [currencyOptions, setCurrencyOptions] = useState([]);
   const [showTargetCountryData, setShowTargetCountryData] = useState(false);
+  const [targetCurrencySymbol, setTargetCurrencySymbol] = useState('');
+
 
   useEffect(() => {
     if (baseCurrency && targetCurrency && amount) {
@@ -23,6 +25,7 @@ const CurrencyConverter = () => {
             .multiply(exchangeRate)
             .format({ symbol: '' });
           setConvertedAmount(convertedValue);
+          
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -34,16 +37,21 @@ const CurrencyConverter = () => {
     axios
       .get('https://restcountries.com/v3.1/all')
       .then((response) => {
-        const currencies = response.data.map(
-          (country) => country.currencies && Object.keys(country.currencies)[0]
-        );
-        const uniqueCurrencies = Array.from(new Set(currencies));
-        setCurrencyOptions(uniqueCurrencies);
+        const currencies = response.data.reduce((acc, country) => {
+          if (country.currencies) {
+            Object.keys(country.currencies).forEach((code) => {
+              acc[code] = country.currencies[code].symbol || code;
+            });
+          }
+          return acc;
+        }, {});
+        setCurrencyOptions(Object.keys(currencies));
+        setTargetCurrencySymbol(currencies[targetCurrency] || targetCurrency);
       })
       .catch((error) => {
         console.error('Error:', error);
       });
-  }, []);
+  }, [targetCurrency]);
 
   const handleBaseCurrencyChange = (event) => {
     setBaseCurrency(event.target.value);
@@ -120,7 +128,7 @@ const CurrencyConverter = () => {
         </div>
         {convertedAmount && (
           <div className="converted-amount">
-            Converted Amount Is: {convertedAmount}
+            Converted Amount Is: {targetCurrencySymbol} {convertedAmount}
           </div>
         )}
       </div>
